@@ -1,16 +1,7 @@
 import React, { useState } from "react";
-import { db } from "../firebase";
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
-import { Container, Form, Button } from "react-bootstrap";
 
 const AddCoupon = () => {
-  const [coupon, setCoupon] = useState({
-    title: "",
-    platform: "",
-    discount: "",
-    code: "",
-    price: "",
-  });
+  const [coupon, setCoupon] = useState({ code: "", discount: "", platform: "", seller: "" });
 
   const handleChange = (e) => {
     setCoupon({ ...coupon, [e.target.name]: e.target.value });
@@ -18,83 +9,36 @@ const AddCoupon = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      await addDoc(collection(db, "coupons"), {
-        ...coupon,
-        timestamp: serverTimestamp(),
-      });
-      alert("Coupon Added Successfully!");
-      setCoupon({ title: "", platform: "", discount: "", code: "", price: "" });
-    } catch (error) {
-      console.error("Error adding coupon: ", error);
+    const response = await fetch("http://localhost:5000/add-coupon", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(coupon),
+    });
+
+    if (response.ok) {
+      alert("Coupon added successfully!");
+      setCoupon({ code: "", discount: "", platform: "", seller: "" });
+    } else {
+      alert("Failed to add coupon.");
     }
   };
 
   return (
-    <Container className="mt-4">
-      <h2>Add a New Coupon</h2>
-      <Form onSubmit={handleSubmit}>
-        <Form.Group className="mb-3">
-          <Form.Label>Title</Form.Label>
-          <Form.Control
-            type="text"
-            name="title"
-            value={coupon.title}
-            onChange={handleChange}
-            required
-          />
-        </Form.Group>
-
-        <Form.Group className="mb-3">
-          <Form.Label>Platform (Amazon, Flipkart, etc.)</Form.Label>
-          <Form.Control
-            type="text"
-            name="platform"
-            value={coupon.platform}
-            onChange={handleChange}
-            required
-          />
-        </Form.Group>
-
-        <Form.Group className="mb-3">
-          <Form.Label>Discount (%)</Form.Label>
-          <Form.Control
-            type="number"
-            name="discount"
-            value={coupon.discount}
-            onChange={handleChange}
-            required
-          />
-        </Form.Group>
-
-        <Form.Group className="mb-3">
-          <Form.Label>Coupon Code</Form.Label>
-          <Form.Control
-            type="text"
-            name="code"
-            value={coupon.code}
-            onChange={handleChange}
-            required
-          />
-        </Form.Group>
-
-        <Form.Group className="mb-3">
-          <Form.Label>Price ($)</Form.Label>
-          <Form.Control
-            type="number"
-            name="price"
-            value={coupon.price}
-            onChange={handleChange}
-            required
-          />
-        </Form.Group>
-
-        <Button variant="primary" type="submit">
-          Add Coupon
-        </Button>
-      </Form>
-    </Container>
+    <div style={styles.container}>
+      <h2>Sell a Coupon</h2>
+      <form onSubmit={handleSubmit}>
+        <input type="text" name="code" placeholder="Coupon Code" value={coupon.code} onChange={handleChange} required />
+        <input type="number" name="discount" placeholder="Discount %" value={coupon.discount} onChange={handleChange} required />
+        <input type="text" name="platform" placeholder="Platform" value={coupon.platform} onChange={handleChange} required />
+        <input type="text" name="seller" placeholder="Your Name" value={coupon.seller} onChange={handleChange} required />
+        <button type="submit">Submit</button>
+      </form>
+    </div>
   );
+};
+
+const styles = {
+  container: { padding: "20px", textAlign: "center" },
 };
 
 export default AddCoupon;

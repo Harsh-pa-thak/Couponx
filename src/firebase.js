@@ -2,15 +2,17 @@ import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_STORAGE_BUCKET",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID",
+  apiKey: "AIzaSyAAP4doixMxiRgFCDvQaDSo_EnjT_2Sxik",
+  authDomain: "couponx-2001f.firebaseapp.com",
+  projectId: "couponx-2001f",
+  storageBucket: "couponx-2001f.firebasestorage.app",
+  messagingSenderId: "1083996397560",
+  appId: "1:1083996397560:web:d54d789c59c49b5850400d"
 };
 
+// Initialize Firebase
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-export { db };
+export { db }; // ✅ Ensure you are exporting db
