@@ -14,14 +14,38 @@ admin.initializeApp({
 
 const db = admin.firestore();
 
-// Route to add a coupon
+// Route to add a coupon with price and expiryDate
 app.post("/add-coupon", async (req, res) => {
     try {
-        const { code, discount, platform, seller } = req.body;
-        if (!code || !discount || !platform || !seller) {
+        const { code, price, discount, platform, seller, expiryDate } = req.body;
+        if (!code || !price || !discount || !platform || !seller || !expiryDate) {
             return res.status(400).json({ error: "All fields are required" });
         }
-        await db.collection("coupons").add({ code, discount, platform, seller });
+
+        // Convert price and discount to numbers
+        const parsedPrice = parseFloat(price);
+        const parsedDiscount = parseFloat(discount);
+
+        if (parsedPrice < 0) {
+            return res.status(400).json({ error: "Price cannot be negative" });
+        }
+
+        const currentDate = new Date();
+        const selectedDate = new Date(expiryDate);
+        if (selectedDate < currentDate) {
+            return res.status(400).json({ error: "Expiry date cannot be in the past" });
+        }
+
+        await db.collection("coupons").add({
+            code,
+            price: parsedPrice,
+            discount: parsedDiscount,
+            platform,
+            seller,
+            expiryDate,
+            createdAt: admin.firestore.Timestamp.now(),
+        });
+
         res.status(201).json({ message: "Coupon added successfully" });
     } catch (error) {
         console.error(error);
@@ -29,11 +53,14 @@ app.post("/add-coupon", async (req, res) => {
     }
 });
 
-// Route to get all coupons
+// Route to get all coupons with price and expiryDate
 app.get("/get-coupons", async (req, res) => {
     try {
-        const snapshot = await db.collection("coupons").get();
-        const coupons = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        const snapshot = await db.collection("coupons").orderBy("createdAt", "desc").get();
+        const coupons = snapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+        }));
         res.json(coupons);
     } catch (error) {
         console.error(error);
