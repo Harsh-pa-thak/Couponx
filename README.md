@@ -264,16 +264,15 @@ SPDX-License-Identifier: MIT
 If you use open-source libraries, list them here for attribution.
 
 ---
-
 ## 📫 Contact
 
-- Author: 1. [Harsh-pa-thak](https://github.com/Harsh-pa-thak)
--          2. [shree-svg] 
-- Issues: [GitHub Issues](https://github.com/Harsh-pa-thak/Couponx/issues)
-- Email :<a href="harsh9934530656pathak@gmail.com">Send email to Harsh Pathak</a>
-- Web   :<a href="https://harsh-pathak.netlify.app/">Harsh</a>
+- Authors:  
+  1. [Harsh-pa-thak](https://github.com/Harsh-pa-thak)  
+  2. [shree-svg](https://github.com/shree-svg)  
 
-
+- Issues: [GitHub Issues](https://github.com/Harsh-pa-thak/Couponx/issues)  
+- Email : <a href="harsh9934530656pathak@gmail.com">Send email to Harsh Pathak</a> | <a href="shreedharsharma192@gmail.com">Send email to Shree</a>  
+- Web   : <a href="https://harsh-pathak.netlify.app/">Harsh</a>
 
 ---
 
